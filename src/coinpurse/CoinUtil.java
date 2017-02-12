@@ -66,12 +66,26 @@ public class CoinUtil {
 	 * Hint: this is easy if you sort the coins by currency first. :-)
 	 */
 	public static void sumByCurrency(List<Coin> coins) {
-		double sum;
+		double sum = 0;
 		sortByCurrency(coins);
-		for( int i = 0 ; i <= coins.size() ; i++ ){
-			if( coins.get(i).getCurrency().equalsIgnoreCase(coins.get(i+1).getCurrency()))
+		for( int i=0;i<coins.size();i++ ){
+			sum += coins.get(i).getValue();
+			if(i>0)
 			{
-				
+				if( !coins.get(i).getCurrency().equalsIgnoreCase(coins.get(i-1).getCurrency()))
+				{
+					sum = sum - coins.get(i).getValue();
+					System.out.println(sum+" "+coins.get(i-1).getCurrency());
+					if( i!=coins.size()-1 )
+					{
+						sum = coins.get(i).getValue();
+					}
+				}
+				else if( i==coins.size()-1)
+				{
+					System.out.println(sum+" "+coins.get(i).getCurrency());
+					sum = 0;
+				}
 			}
 		}
 
