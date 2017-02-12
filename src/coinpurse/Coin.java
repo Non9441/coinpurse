@@ -1,10 +1,9 @@
 package coinpurse;
-//TODO fix this Javadoc. It should be written as a COMPLETE SENTENCE WITH PERIOD.
+
 /**
- * a coin with a monetary value and currency
- * @author
+ * Coin is a money with it's value and it's currency.
+ * @author Non Puthikanon
  */
-//TODO declare that Coin implements Comparable<Coin>
 public class Coin implements Comparable<Coin>{
 	public static final String DEFAULT_CURRENCY = "Baht";
     /** Value of the coin. */
@@ -14,7 +13,7 @@ public class Coin implements Comparable<Coin>{
     
     /**
      * A coin with given value using the default currency.
-     * @param value
+     * @param value is value of the coin you define.
      */
     public Coin( double value ) {
         this.value = value;
@@ -23,8 +22,8 @@ public class Coin implements Comparable<Coin>{
     
     /**
      * A coin with given value and currency.
-     * @param value
-     * @param currency
+     * @param value is value of the coin you define.
+     * @param currency is a currency of the coin you define.
      */
     public Coin( double value, String currency ) {
     	this.value = value;
@@ -32,17 +31,27 @@ public class Coin implements Comparable<Coin>{
  
     }
 
-//TODO Write a getValue() method and javadoc.
+    /**
+     * return the value of this coin.
+     * @return the value of this coin.
+     */
     public double getValue( ) {
     	return this.value;
     } 
     
-//TODO Write a getCurrency() method and javadoc.
+    /**
+     * return the String of currency of this coin.
+     * @return the String of currency of this coin.
+     */
     public String getCurrency() {
     	return this.currency;
     }
     
-//TODO Write an equals(Object) method.
+    /**
+     * check the attribute of two object and return if it same or not.
+     * @param obj is an Object you want to check.
+     * @return true if attribute of two object is equal, otherwise return false.
+     */
     public boolean equals(Object obj) {
     	if(obj == null)
     		return false;
@@ -52,7 +61,11 @@ public class Coin implements Comparable<Coin>{
     	return(this.value==(other.value)&&this.currency.equals(other.currency));
     }
     
-//TODO Write a compareTo method and implement Comparable.
+    /**
+     * compare two object and return int by the condition.
+     * @param obj is an Object you want to compare with.
+     * @return negative if this object in parameter come after, positive if it should come first, otherwise return zero.
+     */
     public int compareTo(Coin other){
     	if(this.value==other.value)
     		return 0;
@@ -63,12 +76,13 @@ public class Coin implements Comparable<Coin>{
     	return 0;
     }
     
-//TODO write a toString() method. See labsheet for what to return.
+    /**
+     * return String of value and currency of this coin.
+     *@return String of value and currency of this coin.
+     */
     public String toString() { 
     	return value+" "+currency; 
     }
-    
-//TODO Write good Javadoc comments on all methods.
+   
     
 }
-//TODO remove the TODO comments after you complete them! Including this one!
