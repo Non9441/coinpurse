@@ -15,9 +15,10 @@ public class Main {
     public static void main( String[] args ) {
         // 1. create a Purse
     	Purse purse = new Purse(CAPACITY);
-
+    	MoneyFactory factory = new MalayMoneyFactory();
+    	MoneyFactory.setMoneyFactory(factory);
         // 2. create a ConsoleDialog with a reference to the Purse object
-    	ConsoleDialog ui = new ConsoleDialog(purse);
+    	ConsoleDialog ui = new ConsoleDialog(purse,factory);
         // 3. run the ConsoleDialog
     	ui.run();
 

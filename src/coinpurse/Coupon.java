@@ -1,6 +1,6 @@
 package coinpurse;
 
-public class Coupon implements Valuable{
+public class Coupon {
 	private double value;
 	private String currency;
 	private String color;
