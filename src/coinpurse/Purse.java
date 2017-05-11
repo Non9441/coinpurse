@@ -1,9 +1,13 @@
 package coinpurse;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Observable;
+
+import coinpurse.strategy.WithdrawStrategy;
 
 
 /**
@@ -15,11 +19,12 @@ import java.util.List;
  *  
  *  @author Non Puthikanon
  */
-public class Purse {
+public class Purse extends Observable{
     /** Collection of objects in the purse. */
     /** Capacity is maximum number of coins the purse can hold.
      *  Capacity is set when the purse is created and cannot be changed.
      */
+	private WithdrawStrategy strategy;
     private final int capacity;
     private List<Valuable> money = new ArrayList<Valuable>();
     
@@ -92,6 +97,8 @@ public class Purse {
     		return false;
     	}
     	this.money.add(value);
+    	setChanged();
+    	notifyObservers();
         return true;
     }
     
@@ -104,56 +111,27 @@ public class Purse {
 	 *    or null if cannot withdraw requested amount.
      */
     public Valuable[] withdraw( double amount ) {
-    	
-    	List<Valuable> templist = new ArrayList<Valuable>();
-    	
-		if ( amount < 0 )
-		{	
-			return null;
+    	if(amount>this.getBalance()) return null;
+    	Collections.sort( money );
+//    	System.out.println( Arrays.toString( money.toArray() ) );
+        List<Valuable> value = strategy.withdraw(amount, money);
+//      System.out.println( Arrays.toString( value.toArray() ) );
+        for(Valuable x : value){
+        	money.remove(x);
+        }
+//        System.out.println( Arrays.toString( money.toArray() ) );
+        setChanged();
+		notifyObservers();
+		Valuable[] boxreturn = new Valuable[value.size()];
+		for(int i=0;i<value.size();i++){
+			boxreturn[i] = value.get(i);
 		}
-		if ( amount > this.getBalance() )
-		{
-			return null;
-		}
-		Collections.sort(this.money, new Comparator<Valuable>() {
-
-			@Override
-			public int compare(Valuable o1, Valuable o2) {
-				if(o1.getValue()>o2.getValue())
-				{
-					return 1;
-				}
-				if(o1.getValue()<o2.getValue())
-				{
-					return -1;
-				}
-				return 0;
-			}
-		});
-		Collections.reverse(this.money);
-		
-		for(Valuable x : money){
-			if(amount>0)
-			{
-				if(x.getValue()<=amount)
-				{
-					amount -= x.getValue();
-					templist.add(x);
-				}
-			}
-		}
-		if( amount==0 )
-		{
-			for(Valuable x : templist){
-				this.money.remove(x);
-			}
-			Valuable[] withdraw = new Valuable[templist.size()];
-	        templist.toArray(withdraw);
-	        return withdraw;
-		}
-		return null;
-        
+		return boxreturn;
 	}
+    
+    public void setStrategy(WithdrawStrategy strategy){
+    	this.strategy = strategy;
+    }
   
     /** 
      * toString returns a string description of the purse contents.
