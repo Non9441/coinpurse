@@ -1,6 +1,7 @@
 package coinpurse;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -8,28 +9,28 @@ import java.util.stream.Collectors;
  * Some Coin utility methods for practice using Lists and Comparator.
  */
 public class CoinUtil {
+	
+	public static <E extends Comparable<? super E>> E max(E ...a) {
+		E max = a[0];
+		for(int i = 0 ; i < a.length ; i++){
+			if(a[i].compareTo(max)>0) {
+				max = a[i];
+			}
+		} return max;
+	}
 
 	/**
 	 * Method that examines all the coins in a List and returns
 	 * only the coins that have a currency that matches the parameter value.
 	 * @param coinlist is a List of Coin objects. This list is not modified.
 	 * @param currency is the currency we want. Must not be null.
-	 * @return a new List containing only the elements from coinlist
+	 * @return a new List containing only the elements from coin list
 	 *     that have the requested currency.  
 	 */
-	public static List<Valuable> filterByCurrency(final List<Valuable> moneylist, String currency) {
-		List<Valuable> money = new ArrayList<Valuable>();
-		for( Valuable x : moneylist ){
-			if(x.getCurrency().equalsIgnoreCase(currency))
-			{
-				money.add(x);
-			}
-		}
-		if( money!=null )
-		{
-			return money;
-		}
-		return null; // return a list of coin references copied from coinlist
+	public static <E extends Valuable>List<E> filterByCurrency(final List<E> moneylist, String currency) {
+		Predicate<E> sameCurrency = (e) -> (e.getCurrency()==currency);
+		return moneylist.stream().filter(sameCurrency).collect(Collectors.toList());
+		
 	}
 	
 
@@ -45,7 +46,7 @@ public class CoinUtil {
 	 *    The compare method should order coins by currency.
 	 * 2. Create a comparator instance and use it to sort the coins.
 	 */
-	public static void sortByCurrency(List<Valuable> money) {
+	public static void sortByCurrency(List<? extends Valuable> money) {
 		money.sort(new Comparator<Valuable>(){
 			public int compare(Valuable m1, Valuable m2){
 				return m1.getCurrency().compareToIgnoreCase(m2.getCurrency());
@@ -107,6 +108,12 @@ public class CoinUtil {
 		money = makeInternationalCoins();
 		System.out.print("coins= "); printList(money," ");
 		sumByCurrency(money);
+//		List<BankNote> c = Arrays.asList(new BankNote(20,"",10000), new BankNote(100,"Bath",1000));
+//		List<BankNote> co = CoinUtil.filterByCurrency(c, "Bath");
+//		
+//		Valuable max = CoinUtil.max(new Coin(5), new Coin(10), new Coin(2), new BankNote(20,"Bath",10000));
+//		System.out.println(max.getValue());
+		
 		
 	}
 	
